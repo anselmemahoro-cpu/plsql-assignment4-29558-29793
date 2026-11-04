@@ -1,134 +1,114 @@
-\# Employee Management System - Oracle PL/SQL
+# EMPLOYEE MANAGEMENT SYSTEM – ORACLE PL/SQL
 
+# GROUP ASSIGNMENT IV
 
+## Assignment and Lecture Details
 
-Group Assignment IV: Records, Collections, Cursors, Bulk Processing, Stored Procedures, Functions and Exception Handling
-
-Course: Database Development with PL/SQL (INSY 8311)
-
-Instructor: Eric Maniraguha | Class group:C 
-
-
-
-\## Group members
-
-
-
-| Full name | Student ID |
-
+| **Detail** | **Information** |
 |---|---|
+| Assignment Title | Employee Management System – Oracle PL/SQL |
+| Assignment Number | Group Assignment IV |
+| Course | Database Development with PL/SQL (INSY 8311) |
+| Instructor | Eric Maniraguha |
+| Class Group | C |
 
-| NIYIMBONERA Mahoro Anselme |29558|
+---
 
-| MUTESI Liza Phiona       |29793|
+## GROUP MEMBERS
 
+| **Full Name** | **Student ID** |
+|---|---:|
+| NIYIMBONERA Mahoro Anselme | 29558 |
+| MUTESI Liza Phiona | 29793 |
 
+---
 
-\## Application description
+# 1. APPLICATION DESCRIPTION
 
+The Employee Management System is a small Human Resources (HR) application developed using Oracle PL/SQL. It manages company departments, jobs, employees, their managers, and salary changes.
 
+The PL/SQL code allows HR to add, update, and delete employees, generate department and team reports, calculate bonuses, adjust salaries, and remove inactive employees in bulk.
 
-A small Human Resources system for a company. It stores departments, jobs, employees
+# 2. APPLICATION REQUIREMENTS
 
-(with their manager) and salary changes. The PL/SQL code lets HR add, update and delete
+1. Maintain departments, jobs, and employees with correct relationships.
+2. Ensure that each employee's salary stays within the salary range defined for their job.
+3. Record every salary change in a salary history table.
+4. Allow HR to add, update, and delete individual employees with clear error messages.
+5. Generate department reports, manager team reports, salary summaries, and top-earner reports.
+6. Support bulk salary increases or cuts for an entire department and bulk deletion of inactive employees. Failed rows are logged without stopping the processing of other rows.
+7. Calculate bonuses for active employees according to the following rules:
+   - 5 or more years of service = 10%
+   - 3 or more years of service = 7%
+   - 1 or more years of service = 5%
+   - Less than 1 year of service = 2%
 
-employees, report on a department or a team, calculate bonuses, and adjust salaries or
+# 3. DATABASE TABLES
 
-remove inactive employees for many people at once.
+The application uses the following database tables:
 
+| **Table** | **Columns** |
+|---|---|
+| **department** | department_id, department_name, location |
+| **job** | job_id, job_title, min_salary, max_salary |
+| **employee** | employee_id, first_name, last_name, email, hire_date, salary, status, job_id, department_id, manager_id |
+| **salary_history** | history_id, employee_id, old_salary, new_salary, change_date |
+| **error_log** | log_id, error_source, error_message, logged_at |
 
+# 4. REPOSITORY STRUCTURE
 
-\## Requirements of the application
+The repository is organized into the following folders and files:
 
+```text
+Employee-Management-System/
+│
+├── 00_schema/
+│   ├── 01_create_tables.sql
+│   └── 02_insert_sample_data.sql
+│
+├── 01_procedures/
+│   └── One file per procedure (10 procedures)
+│
+├── 02_functions/
+│   └── One file per function (6 functions)
+│
+├── 03_tests/
+│   ├── test_success_cases.sql
+│   └── test_error_cases.sql
+│
+├── screenshots/
+│   └── Output of every test
+│
+└── docs/
+    └── IMPLEMENTATION_NOTES.md
+```
 
+# 5. HOW TO RUN THE PROJECT
 
-1\. Keep departments, jobs and employees with correct relationships.
+**Requirements:** Oracle Database and SQL Developer.
 
-2\. Each job has a salary range; an employee salary must stay inside it.
+Run each SQL script using **F5 (Run Script)** in SQL Developer.
 
-3\. Every salary change is saved in a history table.
+Follow these steps in order:
 
-4\. HR can add, update and delete one employee with clear error messages.
+1. Run `00_schema/01_create_tables.sql` to create the database tables.
+2. Run `00_schema/02_insert_sample_data.sql` to insert sample data.
+3. Compile every file in `02_functions/` first, since some procedures use these functions.
+4. Compile every file in `01_procedures/`.
+5. Run `03_tests/test_success_cases.sql` and `03_tests/test_error_cases.sql` block by block. Start by enabling output with:
 
-5\. HR can see a department report, a manager's team, a salary summary and the top earners.
+   ```sql
+   SET SERVEROUTPUT ON;
+   ```
 
-6\. HR can raise or cut salaries for a whole department, and delete all inactive employees,
+6. Compare the execution results with the corresponding screenshots in the `screenshots/` folder.
 
-&#x20;  in bulk. Rows that fail are logged and do not stop the other rows.
+# 6. WHERE EACH CONCEPT IS USED
 
-7\. Bonus rule: 5+ years = 10%, 3+ years = 7%, 1+ year = 5%, less = 2% (active employees only).
+For the full table showing where each concept is implemented, refer to:
 
+`docs/IMPLEMENTATION_NOTES.md`
 
+# 7. AI ASSISTANT STATEMENT
 
-\## Database tables
-
-
-
-\- department (department\_id, department\_name, location)
-
-\- job (job\_id, job\_title, min\_salary, max\_salary)
-
-\- employee (employee\_id, first\_name, last\_name, email, hire\_date, salary, status, job\_id, department\_id, manager\_id)
-
-\- salary\_history (history\_id, employee\_id, old\_salary, new\_salary, change\_date)
-
-\- error\_log (log\_id, error\_source, error\_message, logged\_at)
-
-
-
-\## Repository structure
-
-
-
-\- 00\_schema: 01\_create\_tables.sql, 02\_insert\_sample\_data.sql
-
-\- 01\_procedures: one file per procedure (10 procedures)
-
-\- 02\_functions: one file per function (6 functions)
-
-\- 03\_tests: test\_success\_cases.sql, test\_error\_cases.sql
-
-\- screenshots: output of every test
-
-\- docs: IMPLEMENTATION\_NOTES.md
-
-
-
-\## How to run (Oracle Database, SQL Developer, run each file with F5)
-
-
-
-1\. Run 00\_schema/01\_create\_tables.sql
-
-2\. Run 00\_schema/02\_insert\_sample\_data.sql
-
-3\. Compile every file in 02\_functions/ first (the procedures use some of them)
-
-4\. Compile every file in 01\_procedures/
-
-5\. Run 03\_tests/test\_success\_cases.sql and 03\_tests/test\_error\_cases.sql block by block (start with SET SERVEROUTPUT ON)
-
-6\. Compare the results with the screenshots folder
-
-
-
-\## Where each concept is used
-
-
-
-See docs/IMPLEMENTATION\_NOTES.md for the full table.
-
-
-
-\## AI assistant statement
-
-
-
-We used an AI assistant to help us plan the project, generate and
-
-debug the first versions of the SQL and PL/SQL code, and write the documentation templates.
-
-We then ran every script in Oracle, checked the results, and fixed compile errors. Both of us
-
-have read the code and can explain it. <Edit this paragraph so it describes exactly how you used it.>
-
+We used an AI assistant to help us plan the project, generate and debug the initial versions of the SQL and PL/SQL code, and prepare the documentation templates. We then executed every script in Oracle, checked the results, and corrected compilation errors. Both group members have reviewed the code and can explain its implementation.
